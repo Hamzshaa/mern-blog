@@ -1,7 +1,47 @@
-import { Button, Label, TextInput } from "flowbite-react";
-import { Link } from "react-router-dom";
+import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 const Signup = () => {
+  const [inputText, setInputText] = useState({});
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    setInputText({ ...inputText, [e.target.id]: e.target.value.trim() });
+  };
+
+  const handleSubmitButton = async (e) => {
+    e.preventDefault();
+
+    if (!inputText.username || !inputText.email || !inputText.password) {
+      return setError("Please fill in all fields");
+    }
+
+    try {
+      setLoading(true);
+      setError("");
+      const res = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(inputText),
+      });
+
+      const data = await res.json();
+      if (data.success === false) {
+        return setError(data.message);
+      }
+      if (res.ok) {
+        navigate("/sign-in");
+      }
+    } catch (error) {
+      setError(error.message);
+      console.log(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <div className="min-h-screen mt-20">
       <div className="flex p-3 max-w-3xl mx-auto flex-col md:flex-row md:items-center gap-5">
@@ -25,36 +65,68 @@ const Signup = () => {
             <div>
               <Label
                 value="Your username"
-                className="z-10 relative top-3 left-4 bg-white p-1 text-gray-700"
+                className="z-10 relative top-2.5 left-4 bg-white p-1 text-gray-500 rounded-md "
               />
-              <TextInput type="text" id="username" />
+              <TextInput
+                type="text"
+                id="username"
+                onChange={handleChange}
+                value={inputText.username}
+                color="gray"
+              />
             </div>
             <div>
               <Label
                 value="Your email"
-                className="z-10 relative top-3 left-4 bg-white p-1 text-gray-700"
+                className="z-10 relative top-2.5 left-4 bg-white p-1 text-gray-500  rounded-md"
               />
-              <TextInput type="text" id="email" />
+              <TextInput
+                type="email"
+                id="email"
+                onChange={handleChange}
+                value={inputText.email}
+                color="gray"
+              />
             </div>
             <div>
               <Label
                 value="Your password"
-                className="z-10 relative top-3 left-4 bg-white p-1 text-gray-700"
+                className="z-10 relative top-2.5 left-4 bg-white p-1 text-gray-500  rounded-md"
               />
-              <TextInput type="text" id="password" />
+              <TextInput
+                type="password"
+                id="password"
+                onChange={handleChange}
+                value={inputText.password}
+                color="gray"
+              />
             </div>
             <Button
               gradientDuoTone="purpleToPink"
               type="submit"
               className="mt-4"
+              onClick={handleSubmitButton}
+              disabled={loading}
             >
-              Sign Up
+              {loading ? (
+                <>
+                  <Spinner size="sm" />
+                  <span className="pl-3">Loading...</span>
+                </>
+              ) : (
+                "Sign Up"
+              )}
             </Button>
           </form>
           <div className="flex gap-2 text-sm mt-5">
             <span>Have an account?</span>
             <Link to="/sign-in">Sign In</Link>
           </div>
+          {error && (
+            <Alert className="mt-5" color="failure">
+              {error}
+            </Alert>
+          )}
         </div>
       </div>
     </div>
