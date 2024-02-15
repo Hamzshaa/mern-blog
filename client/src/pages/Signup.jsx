@@ -1,6 +1,7 @@
 import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import OAuth from "../components/OAuth";
 
 const Signup = () => {
   const [inputText, setInputText] = useState({});
@@ -65,7 +66,7 @@ const Signup = () => {
             <div>
               <Label
                 value="Your username"
-                className="z-10 relative top-2.5 left-4 bg-white p-1 text-gray-500 rounded-md "
+                className="z-10 relative top-2.5 left-4 bg-white p-1 text-gray-500 rounded-md dark:bg-[rgba(20,27,45,0.3)]"
               />
               <TextInput
                 type="text"
@@ -78,7 +79,7 @@ const Signup = () => {
             <div>
               <Label
                 value="Your email"
-                className="z-10 relative top-2.5 left-4 bg-white p-1 text-gray-500  rounded-md"
+                className="z-10 relative top-2.5 left-4 bg-white p-1 text-gray-500  rounded-md dark:bg-[rgba(20,27,45,0.3)]"
               />
               <TextInput
                 type="email"
@@ -91,7 +92,7 @@ const Signup = () => {
             <div>
               <Label
                 value="Your password"
-                className="z-10 relative top-2.5 left-4 bg-white p-1 text-gray-500  rounded-md"
+                className="z-10 relative top-2.5 left-4 bg-white p-1 text-gray-500  rounded-md dark:bg-[rgba(20,27,45,0.3)]"
               />
               <TextInput
                 type="password"
@@ -117,6 +118,7 @@ const Signup = () => {
                 "Sign Up"
               )}
             </Button>
+            <OAuth />
           </form>
           <div className="flex gap-2 text-sm mt-5">
             <span>Have an account?</span>
