@@ -128,7 +128,7 @@ export const getComments = async (req, res, next) => {
       now.getMonth() - 1,
       now.getDate()
     );
-    const lastMonthComments = await Comment.find({
+    const lastMonthComments = await Comment.countDocuments({
       updatedAt: { $gte: oneMonthAgo },
     });
 
