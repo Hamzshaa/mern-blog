@@ -6,6 +6,10 @@ body {
   height: 100vh;
 }
 
+*::-webkit-scrollbar {
+  display: none;
+}
+
 .ql-editor {
   font-size: 1.05rem;
 }
