@@ -6,6 +6,7 @@ import authRoutes from "./routes/auth.route.js";
 import postRoutes from "./routes/post.route.js";
 import commentRouter from "./routes/comment.route.js";
 import cookieParser from "cookie-parser";
+import path from "path";
 
 dotenv.config();
 
@@ -18,6 +19,8 @@ mongoose
     console.log(error);
   });
 
+const __dirname = path.resolve();
+
 const app = express();
 
 app.use(express.json());
@@ -28,9 +31,14 @@ app.use("/api/auth", authRoutes);
 app.use("/api/post", postRoutes);
 app.use("/api/comment", commentRouter);
 
-app.listen(5000, () => {
-  console.log("Server is running on port 5000");
-});
+app.use(express.static(path.join(__dirname, "/client/dist")));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
+}) *
+  app.listen(5000, () => {
+    console.log("Server is running on port 5000");
+  });
 
 // middleware to handle error
 app.use((err, req, res, next) => {
